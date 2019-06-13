@@ -2,11 +2,11 @@ public class CallRest {
     public static String getAccessToken(){
         //definimos los parametros que usaremos para autenticarnos
         String accessEndpoint='https://login.salesforce.com/services/oauth2/token';
-        String username = 'usuariorest@cloudco.com.mx.demo'; 
-        String password = 'Demo20192019';
-        String securityToken= 'z9EraU98TZyhwh9KMCsYBMTPJ';
-        String clientKey = '3MVG9IHf89I1t8hrJIoUMzPBE_4mIAYWOO__KNAmKMsSrGVP930AxnWcaSFaxzEt2jSaNC3PphfGV9gOUNIrx';
-        String clientSecret = '106A37F28B6143FB16D4C6C60FCC5547E55B5466A4EC95A490D3BB98F1C7A9C1';
+        String username = '***********'; 
+        String password = '***********';
+        String securityToken= '**********';
+        String clientKey = '**********';
+        String clientSecret = '***********';
         String Access_Token = '';
     
         //iniciamos Un request que usaremos para hacer una llamada REST POST al endpoint de login
@@ -50,7 +50,7 @@ public class CallRest {
         //se inicia el requests
         Httprequest req1 = new HttpRequest(); 
         //se define el endpoint, concatenando como parametro la account id
-        req1.setEndpoint('https://pruebasoauthlalo-dev-ed.my.salesforce.com/services/apexrest/CuentasWS/'+accountId);  
+        req1.setEndpoint('https://**********.my.salesforce.com/services/apexrest/CuentasWS/'+accountId);  
         //tipo get
         req1.setMethod('GET');    
         req1.setHeader('Content-Type','application/x-www-form-urlencoded');
@@ -70,7 +70,7 @@ public class CallRest {
         //se inicia el requests
         Httprequest req1 = new HttpRequest(); 
         //se define el endpoint, concatenando como parametro la account id
-        req1.setEndpoint('https://pruebasoauthlalo-dev-ed.my.salesforce.com/services/apexrest/CuentasWS/');  
+        req1.setEndpoint('https://**********.my.salesforce.com/services/apexrest/CuentasWS/');  
         //tipo POST
         req1.setMethod('POST');  
         //el contenido sera JSON
@@ -93,7 +93,7 @@ public class CallRest {
         //se inicia el requests
         Httprequest req1 = new HttpRequest(); 
         //se define el endpoint, concatenando como parametro la account id
-        req1.setEndpoint('https://pruebasoauthlalo-dev-ed.my.salesforce.com/services/apexrest/CuentasWS/');  
+        req1.setEndpoint('https://*******.my.salesforce.com/services/apexrest/CuentasWS/');  
         //tipo PUT
         req1.setMethod('PUT');  
         //el contenido sera JSON
@@ -116,7 +116,7 @@ public class CallRest {
         //se inicia el requests
         Httprequest req1 = new HttpRequest(); 
         //se define el endpoint, concatenando como parametro la account id
-        req1.setEndpoint('https://pruebasoauthlalo-dev-ed.my.salesforce.com/services/apexrest/CuentasWS/'+idRegistro);  
+        req1.setEndpoint('https://******.my.salesforce.com/services/apexrest/CuentasWS/'+idRegistro);  
         //tipo DELETE
         req1.setMethod('DELETE');  
         //el contenido sera JSON
