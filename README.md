@@ -7,16 +7,4 @@ And the Call classes were created on another org
 
 OAuth Username Password Flow was used for this demo
 
-accessEndpoint='https://login.salesforce.com/services/oauth2/token';
-
-username = 'usuariorest@cloudco.com.mx.demo'; 
-
-password = 'Demo20192019';
-
-securityToken= 'z9EraU98TZyhwh9KMCsYBMTPJ';
-
-clientKey = '3MVG9IHf89I1t8hrJIoUMzPBE_4mIAYWOO__KNAmKMsSrGVP930AxnWcaSFaxzEt2jSaNC3PphfGV9gOUNIrx';
-
-clientSecret = '106A37F28B6143FB16D4C6C60FCC5547E55B5466A4EC95A490D3BB98F1C7A9C1';
-
-endpointREST - https://pruebasoauthlalo-dev-ed.my.salesforce.com/services/apexrest/CuentasWS
+This demo was created for the Salesforce Academy at UPIICSA IPN
