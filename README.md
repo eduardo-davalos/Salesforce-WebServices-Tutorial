@@ -11,4 +11,4 @@ This demo was created for the Salesforce Academy at UPIICSA IPN
 
 https://pruebasoauthlalo-dev-ed.my.salesforce.com/services/apexrest/CuentasWS/
 https://login.salesforce.com/services/oauth2/token
-
+https://na132.salesforce.com/services/Soap/class/WebServiceSO
