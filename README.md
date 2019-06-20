@@ -8,3 +8,7 @@ And the Call classes were created on another org
 OAuth Username Password Flow was used for this demo
 
 This demo was created for the Salesforce Academy at UPIICSA IPN
+
+https://pruebasoauthlalo-dev-ed.my.salesforce.com/services/apexrest/CuentasWS/
+https://login.salesforce.com/services/oauth2/token
+
