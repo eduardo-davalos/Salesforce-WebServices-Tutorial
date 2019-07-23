@@ -1,0 +1,140 @@
+public class Jwtoken {
+    
+    //VARIABLES QUE SE USARAN PARA CONECTARSE POR JWT
+    public class Configuration {
+        public String jwtUsername {get; set;}
+        public String jwtConnectedAppConsumerKey {get; set;}
+        public String jwtSigningCertificateName {get; set;}
+        public String jwtHostname {get; set;}
+    }
+    
+    //header clase y constructor
+    private class Header {
+        String alg;
+        Header(String alg) {
+            this.alg = alg;
+        }
+    }
+    
+    //body clase y constructor
+    private class Body {
+        String iss;
+        String sub;
+        String aud;
+        String exp;
+        Body(String iss, String sub, String aud, String exp) {
+            this.iss = iss;
+            this.sub = sub;
+            this.aud = aud;
+            this.exp = exp;
+        }
+    }
+    
+    private class JwtException extends Exception {
+    }
+    
+    private Configuration config;
+    
+    public Jwtoken(Configuration config) {
+        
+        this.config = config;
+    }
+    
+    //Se inicia la solicitud del access token
+    public String requestAccessToken() {
+        
+        //se crea un mapa de string para la cabecera
+        Map<String, String> m = new Map<String, String>();
+        //Se define el tipo de conexion ouath a jwt 
+        m.put('grant_type', 'urn:ietf:params:oauth:grant-type:jwt-bearer');
+        //se genera un token
+        m.put('assertion', createToken());
+        
+        //se inicia la peticion de logeo
+        HttpRequest req = new HttpRequest();
+        //se pone el header
+        req.setHeader('Content-Type','application/x-www-form-urlencoded');
+        //el endpoint
+        req.setEndpoint('https://' + config.jwtHostname +'/services/oauth2/token');
+        // tipo post
+        req.setMethod('POST');
+        req.setTimeout(60 * 1000);
+        //se pasa el token en el body
+        req.setBody(formEncode(m));
+        
+        //se hace el call se recibe respuesta
+        HttpResponse res = new Http().send(req);
+        if (res.getStatusCode() >= 200 && res.getStatusCode() < 300) {
+            return extractJsonField(res.getBody(), 'access_token');
+        } else {
+            throw new JwtException(res.getBody());
+        }
+    }
+    
+    //codifica a utf-8
+    private String formEncode(Map<String, String> m) {
+        
+        String s = '';
+        for (String key : m.keySet()) {
+            if (s.length() > 0) {
+                s += '&';
+            }
+            s += key + '=' + EncodingUtil.urlEncode(m.get(key), 'UTF-8');
+        }
+        return s;
+    }
+    
+    //metodo para parsear json
+    private String extractJsonField(String body, String field) {
+        
+        JSONParser parser = JSON.createParser(body);
+        while (parser.nextToken() != null) {
+            if (parser.getCurrentToken() == JSONToken.FIELD_NAME
+                && parser.getText() == field) {
+                    parser.nextToken();
+                    return parser.getText();
+                }
+        }
+        throw new JwtException(field + ' not found in response ' + body);
+    }
+    
+    //gerera el jwt formato
+    private String createToken() {
+        
+        //se inicia como rs256
+        String alg = 'RS256';
+        //se agrega la consumer key
+        String iss = config.jwtConnectedAppConsumerKey;
+        //se agrega el username
+        String sub = config.jwtUsername;
+        //la audiencia
+        String aud = 'https://' + config.jwtHostname;
+        //la expiracion
+        String exp = String.valueOf(System.currentTimeMillis() + 60 * 60 * 1000);
+        
+        //se genera el header en json
+        String headerJson = JSON.serialize(new Header(alg));
+        //se genera el body en json
+        String bodyJson = JSON.serialize(new Body(iss, sub, aud, exp));
+        
+        //se genera el token en base64
+        String token = base64UrlSafe(Blob.valueOf(headerJson))
+            + '.' + base64UrlSafe(Blob.valueOf(bodyJson));
+        //se genera la firma con el certificado
+        String signature = base64UrlSafe(Crypto.signWithCertificate(
+            'RSA-SHA256',
+            Blob.valueOf(token),
+            config.jwtSigningCertificateName
+        ));
+        //se suma la firma al token
+        token += '.' + signature;
+        //se devuelve el token
+        return token;
+    }
+    
+    //convierte a base 64
+    private String base64UrlSafe(Blob b) {
+        
+        return EncodingUtil.base64Encode(b).replace('+', '-').replace('/', '_');
+    }
+}

@@ -1,0 +1,47 @@
+public class JWTokenCall {
+    
+    //metodo para hacer login via OAuth JWT a sistema externo
+    public static void callJWT()
+    {
+        //Iniciamos definiendo las variables del JWT
+        Jwtoken.Configuration config = new Jwtoken.Configuration();
+        //el username del sistema externo
+        config.jwtUsername = 'usuariorest@cloudco.com.mx.demo'; 
+        // el certificado a usar
+        config.jwtSigningCertificateName = 'certifi';
+        // el endpoint del login
+        config.jwtHostname = 'login.salesforce.com';
+        // el consumer key de la app externa
+        config.jwtConnectedAppConsumerKey = '3MVG9IHf89I1t8hrJIoUMzPBE_x_xF4Pbyv7jqKhhsI3FJBt8JRhbKYGESHH7p4JYcj.zdD0HlQVOJHv0gxln';
+        
+        //se construye el token y se hace el login
+        String accessToken = new Jwtoken(config).requestAccessToken();
+        //recibimos el token de acceso
+        system.debug('accesstoken'+accesstoken);
+        
+        //Se llama al servicio deseado, en este caso REST
+        system.debug('creaAccounts+ '+creaAccounts(accessToken,'dsds','5534534'));
+    }
+    
+    //Metodo para hacer call al servicio externo
+    public static string creaAccounts(String accessToken, string name, string phone)
+    {
+        //se inicia el requests
+        Httprequest req1 = new HttpRequest(); 
+        //se define el endpoint
+        req1.setEndpoint('https://pruebasoauthlalo-dev-ed.my.salesforce.com/services/apexrest/CuentasWS/');  
+        //tipo POST
+        req1.setMethod('POST');  
+        req1.setHeader('Content-Type', 'application/json;charset=UTF-8');
+        //Aqui se le pasa la autorizaci´n elacces token
+        req1.setHeader('Authorization', 'OAuth '+ accessToken);
+        //Le pasamos los parametros en JSON al Body
+        req1.setBody('{"name":"'+name+'","phone":"'+phone+'"}'); 
+        //se incia la llamada http
+        Http http1 = new Http();
+        //se recibe la respuesta de la llamada del request
+        HttpResponse res1 = http1.send(req1);                 
+        //se regresa el resultado
+        return res1.getBody();
+    }
+}
